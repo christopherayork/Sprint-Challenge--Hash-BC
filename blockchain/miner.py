@@ -23,9 +23,10 @@ def proof_of_work(last_proof):
     start = timer()
 
     print("Searching for next proof")
-    proof = 0
+    proof = random.randrange(0, 1000000)
     #  TODO: Your code here
-
+    while valid_proof(last_proof, proof) is False:
+        proof += 1
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
 
@@ -40,7 +41,13 @@ def valid_proof(last_hash, proof):
     """
 
     # TODO: Your code here!
-    pass
+    last_hash = hashlib.sha256(f'{last_hash}'.encode()).hexdigest()
+    new_hash = hashlib.sha256(f'{proof}'.encode()).hexdigest()
+    # print(f'Hashes: {last_hash}    {new_hash}')
+    # selection1 = last_hash[-6:]
+    # selection2 = new_hash[:6]
+    # print(f'Selections: {selection1}    {selection2}')
+    return last_hash[-6:] == new_hash[:6]
 
 
 if __name__ == '__main__':
@@ -55,6 +62,7 @@ if __name__ == '__main__':
     # Load or create ID
     f = open("my_id.txt", "r")
     id = f.read()
+    id = id.strip()
     print("ID is", id)
     f.close()
 
